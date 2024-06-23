@@ -32,22 +32,53 @@ async def handle_meme(message: types.Message) -> None:
     log.info(log_utils.format_message(message=message))
     await message.bot.send_chat_action(
         chat_id=message.chat.id,
-        action=ChatAction.TYPING,
+        action=ChatAction.UPLOAD_DOCUMENT,
     )
     await asyncio.sleep(0.05)
     meme_url: str = await get_meme_link()
     if meme_url.startswith("http"):
-        meme_ext: str = meme_url.split(".")[-1]
-        if meme_ext == "gif":
-            await message.answer_animation(animation=meme_url)
-        elif meme_ext == "mp4":
-            await message.answer_video(video=meme_url)
-        else:
-            await message.answer_photo(photo=meme_url)
+        match meme_url.split(".")[-1]:
+            case "gif":
+                await message.answer_animation(animation=meme_url)
+            case "mp4":
+                await message.answer_video(video=meme_url)
+            case _:
+                await message.answer_photo(photo=meme_url)
     elif meme_url:
         await message.answer(text=meme_url)
     else:
         await message.answer(text=CONTENT_ERROR_TEXT)
 
 
-# TODO: Добавить отправку чисто гифок и видео
+@router.message(Command("gmeme"))
+async def handle_vmeme(message: types.Message) -> None:
+    log.info(log_utils.format_message(message=message))
+    await message.bot.send_chat_action(
+        chat_id=message.chat.id,
+        action=ChatAction.UPLOAD_DOCUMENT,
+    )
+    await asyncio.sleep(0.05)
+    meme_url: str = await get_meme_link("gif")
+    if meme_url.startswith("http"):
+        await message.answer_animation(animation=meme_url)
+    elif meme_url:
+        await message.answer(text=meme_url)
+    else:
+        await message.answer(text=CONTENT_ERROR_TEXT)
+
+
+@router.message(Command("vmeme"))
+async def handle_gmeme(message: types.Message) -> None:
+    log.info(log_utils.format_message(message=message))
+    await message.bot.send_chat_action(
+        chat_id=message.chat.id,
+        action=ChatAction.UPLOAD_VIDEO,
+    )
+    await asyncio.sleep(0.05)
+    meme_url: str = await get_meme_link("video")
+    if meme_url.startswith("http"):
+        await message.answer_video(video=meme_url)
+    elif meme_url:
+        await message.answer(text=meme_url)
+    else:
+        await message.answer(text=CONTENT_ERROR_TEXT)
