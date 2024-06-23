@@ -1,18 +1,18 @@
 __all__ = ("get_anecdote",)
 
-import config as cfg
 import log_utils
 import logging
 import asyncio
 from bs4 import BeautifulSoup
 from request_utils import request
+from config import CONTENT_ERROR_TEXT, ANECDOTE_URL
 
 log = logging.getLogger(name=__name__)
 
 
-def parse_text(text: str) -> str:
+def parse_html(text: str) -> str:
     if not text:
-        return cfg.CONTENT_ERROR_TEXT
+        return CONTENT_ERROR_TEXT
     bs: BeautifulSoup = BeautifulSoup(text, "html.parser")
     # получаем элемент, в котором написан текст анекдота
     result: str = str(bs.find_all(class_="topicbox")[1].find(class_="text"))
@@ -25,17 +25,19 @@ def parse_text(text: str) -> str:
     tmp_list = result.split("<")
     tmp_list[-1] = ""
     result = "".join(tmp_list)
-    return result or cfg.CONTENT_ERROR_TEXT
+    return result or CONTENT_ERROR_TEXT
 
 
 async def get_anecdote() -> str:
     resp_status: int
     resp_reason: str
     resp_text: str
-    resp_status, resp_reason, resp_text = await request(url=cfg.ANECDOTE_URL)
+    resp_status, resp_reason, resp_text = await request(url=ANECDOTE_URL)
+    log.debug(f"{resp_status=} {resp_reason=}")
     result: str
     if resp_status == 200:
-        result = parse_text(text=resp_text)
+        result = parse_html(text=resp_text)
+        log.debug(f"{result=}")
     else:
         result = str(resp_status) + " - " + resp_reason
     return result
@@ -43,8 +45,7 @@ async def get_anecdote() -> str:
 
 async def main() -> None:
     log_utils.init_logging()
-    result: str = await get_anecdote()
-    log.info(f"anecdote={result}")
+    await get_anecdote()
 
 
 if __name__ == "__main__":
