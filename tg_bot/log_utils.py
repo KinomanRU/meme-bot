@@ -16,7 +16,7 @@ def format_message(message: Message) -> str:
     command: str = (
         "Command '" + message.text + "'" if message.text else "No text command given"
     )
-    return f"{command} from {message.from_user.full_name} [{str(message.from_user)}]"
+    return f"{command} from '{message.from_user.full_name}' [{str(message.from_user)}]"
 
 
 def init_logging():

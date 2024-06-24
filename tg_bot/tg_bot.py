@@ -19,13 +19,16 @@ async def main() -> Never:
         token=cfg.BOT_TOKEN,
         session=cfg.session,
     )
+    print("Bot started")
     await dp.start_polling(bot)
 
 
 if __name__ == "__main__":
     try:
+        print("Starting...")
         asyncio.run(main())
     except KeyboardInterrupt:
         log.info("Normal shutdown")
+        print("Bot stopped")
     except Exception as err:
         log.exception(str(err))

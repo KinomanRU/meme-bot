@@ -2,6 +2,7 @@ import asyncio
 import logging
 
 from aiogram import Router
+from aiogram.enums import ChatAction
 from aiogram.filters import CommandStart, Command
 from aiogram.types import Message
 
@@ -15,6 +16,10 @@ router = Router(name=__name__)
 @router.message(CommandStart())
 async def handle_start(message: Message) -> None:
     log.info(log_utils.format_message(message=message))
+    await message.bot.send_chat_action(
+        chat_id=message.chat.id,
+        action=ChatAction.TYPING,
+    )
     await asyncio.sleep(0.05)
     await message.answer(
         text=f"Hello, {message.from_user.full_name}!\n\n" + cfg.HELP_TEXT
@@ -24,5 +29,9 @@ async def handle_start(message: Message) -> None:
 @router.message(Command("help"))
 async def handle_help(message: Message) -> None:
     log.info(log_utils.format_message(message=message))
+    await message.bot.send_chat_action(
+        chat_id=message.chat.id,
+        action=ChatAction.TYPING,
+    )
     await asyncio.sleep(0.05)
     await message.answer(text=cfg.HELP_TEXT)
