@@ -1,9 +1,10 @@
-import config as cfg
-import logging
 import asyncio
-from aiogram import Bot, Dispatcher
+import logging
 from typing import Never
 
+from aiogram import Bot, Dispatcher
+
+import config as cfg
 import log_utils
 from routers import router as main_router
 

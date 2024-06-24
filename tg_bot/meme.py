@@ -1,12 +1,14 @@
 __all__ = ("get_meme_link",)
 
-import log_utils
-import logging
 import asyncio
-from bs4 import BeautifulSoup
-from request_utils import request
-from config import MEME_URL, MEME_SEARCH_ATTEMPTS
+import logging
 from typing import Literal
+
+from bs4 import BeautifulSoup
+
+import config as cfg
+import log_utils
+import request_utils
 
 log = logging.getLogger(name=__name__)
 
@@ -15,17 +17,24 @@ def search_any_meme(text: str) -> str:
     if not text:
         return ""
     bs: BeautifulSoup = BeautifulSoup(text, "html.parser")
-    result: str
-    # получаем тег, в котором указана ссылка на мем
-    # картинка или гифка
-    page_element = bs.find_all(class_="topicbox")[1].find(name="img")
-    if page_element is None or not page_element:
-        # видео
-        page_element = bs.find_all(class_="topicbox")[1].find(name="source")
-    result = str(page_element)
-    # ищем ссылку
-    result = result[result.find('src="') + 5 :]
-    result = result[: result.find('"')]
+    result: str = ""
+    for i, topic in enumerate(bs.find_all(class_="topicbox")):
+        # нулевой элемент - это заголовок
+        if i == 0:
+            continue
+        # получаем тег, в котором указана ссылка на мем
+        # картинка или гифка
+        page_element = topic.find(name="img")
+        if page_element is None or not page_element:
+            # видео
+            page_element = topic.find(name="source")
+            if page_element is None or not page_element:
+                continue
+        result = str(page_element)
+        # ищем ссылку
+        result = result[result.find('src="') + 5 :]
+        result = result[: result.find('"')]
+        break
     return result
 
 
@@ -71,6 +80,7 @@ def search_video_meme(text: str) -> str:
         # ищем ссылку
         result = result[result.find('src="') + 5 :]
         result = result[: result.find('"')]
+        break
     return result
 
 
@@ -82,10 +92,12 @@ async def get_meme_link(what: Literal["gif", "video"] | None = None) -> str:
     resp_reason: str
     resp_text: str
     result: str = ""
-    attempts: int = MEME_SEARCH_ATTEMPTS if what else 1
+    attempts: int = cfg.MEME_SEARCH_ATTEMPTS if what else 1
     for _ in range(attempts):
         log.debug(f"iter={_}")
-        resp_status, resp_reason, resp_text = await request(url=MEME_URL)
+        resp_status, resp_reason, resp_text = await request_utils.request(
+            url=cfg.MEME_URL
+        )
         log.debug(f"{resp_status=} {resp_reason=}")
         if resp_status == 200:
             match what:

@@ -1,10 +1,13 @@
-import log_utils
-import logging
 import asyncio
-from aiogram import Router, types
+import logging
+
+from aiogram import Router
 from aiogram.enums import ChatAction
 from aiogram.filters import Command
-from config import CONTENT_ERROR_TEXT
+from aiogram.types import Message
+
+import config as cfg
+import log_utils
 from anecdote import get_anecdote
 from meme import get_meme_link
 
@@ -13,7 +16,7 @@ router = Router(name=__name__)
 
 
 @router.message(Command("anec"))
-async def handle_anecdote(message: types.Message) -> None:
+async def handle_anecdote(message: Message) -> None:
     log.info(log_utils.format_message(message=message))
     await message.bot.send_chat_action(
         chat_id=message.chat.id,
@@ -24,11 +27,11 @@ async def handle_anecdote(message: types.Message) -> None:
     if anecdote_text:
         await message.answer(text=anecdote_text)
     else:
-        await message.answer(text=CONTENT_ERROR_TEXT)
+        await message.answer(text=cfg.CONTENT_ERROR_TEXT)
 
 
 @router.message(Command("meme"))
-async def handle_meme(message: types.Message) -> None:
+async def handle_meme(message: Message) -> None:
     log.info(log_utils.format_message(message=message))
     await message.bot.send_chat_action(
         chat_id=message.chat.id,
@@ -47,11 +50,11 @@ async def handle_meme(message: types.Message) -> None:
     elif meme_url:
         await message.answer(text=meme_url)
     else:
-        await message.answer(text=CONTENT_ERROR_TEXT)
+        await message.answer(text=cfg.CONTENT_ERROR_TEXT)
 
 
 @router.message(Command("gmeme"))
-async def handle_vmeme(message: types.Message) -> None:
+async def handle_vmeme(message: Message) -> None:
     log.info(log_utils.format_message(message=message))
     await message.bot.send_chat_action(
         chat_id=message.chat.id,
@@ -64,11 +67,11 @@ async def handle_vmeme(message: types.Message) -> None:
     elif meme_url:
         await message.answer(text=meme_url)
     else:
-        await message.answer(text=CONTENT_ERROR_TEXT)
+        await message.answer(text=cfg.CONTENT_ERROR_TEXT)
 
 
 @router.message(Command("vmeme"))
-async def handle_gmeme(message: types.Message) -> None:
+async def handle_gmeme(message: Message) -> None:
     log.info(log_utils.format_message(message=message))
     await message.bot.send_chat_action(
         chat_id=message.chat.id,
@@ -81,4 +84,4 @@ async def handle_gmeme(message: types.Message) -> None:
     elif meme_url:
         await message.answer(text=meme_url)
     else:
-        await message.answer(text=CONTENT_ERROR_TEXT)
+        await message.answer(text=cfg.CONTENT_ERROR_TEXT)
