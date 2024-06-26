@@ -6,6 +6,7 @@ from typing import Literal
 from bs4 import BeautifulSoup
 import log_utils
 import request_utils
+import urls
 from config import config
 
 log = logging.getLogger(name=__name__)
@@ -93,9 +94,7 @@ async def get_meme_link(what: Literal["gif", "video"] | None = None) -> str:
     attempts: int = config.getint("Bot", "Meme_Search_Attempts") if what else 1
     for _ in range(attempts):
         log.debug(f"iter={_}")
-        resp_status, resp_reason, resp_text = await request_utils.request(
-            url=config.get("Bot", "Meme_URL")
-        )
+        resp_status, resp_reason, resp_text = await request_utils.request(url=urls.MEME)
         if resp_status == 200:
             match what:
                 case None:

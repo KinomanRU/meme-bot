@@ -16,4 +16,4 @@ async def echo_message(message: Message) -> None:
         chat_id=message.chat.id,
         action=ChatAction.TYPING,
     )
-    await message.reply(text=strings.INCORRECT_INPUT)
+    await message.reply(text=strings.UNKNOWN_COMMAND)

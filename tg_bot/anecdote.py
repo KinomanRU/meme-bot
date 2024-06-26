@@ -6,7 +6,7 @@ from bs4 import BeautifulSoup
 import log_utils
 import request_utils
 import strings
-from config import config
+import urls
 
 log = logging.getLogger(name=__name__)
 
@@ -44,9 +44,7 @@ async def get_anecdote() -> str:
     resp_status: int
     resp_reason: str
     resp_text: str
-    resp_status, resp_reason, resp_text = await request_utils.request(
-        url=config.get("Bot", "Anecdote_URL")
-    )
+    resp_status, resp_reason, resp_text = await request_utils.request(url=urls.ANECDOTE)
     result: str
     if resp_status == 200:
         result = parse_html(text=resp_text)
