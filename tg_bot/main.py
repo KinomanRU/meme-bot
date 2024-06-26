@@ -1,12 +1,12 @@
 import asyncio
 import logging
 from typing import Never
-
 from aiogram import Bot, Dispatcher
-
-import config as cfg
 import log_utils
+import proxy_utils
 from routers import router as main_router
+from datetime import datetime as dt
+from config import config
 
 log = logging.getLogger(name=__name__)
 
@@ -16,19 +16,19 @@ async def main() -> Never:
     dp = Dispatcher()
     dp.include_router(main_router)
     bot = Bot(
-        token=cfg.BOT_TOKEN,
-        session=cfg.session,
+        token=config.get("Bot", "Bot_Token"),
+        session=proxy_utils.SESSION,
     )
-    print("Bot started")
+    print(dt.now(), "Bot started")
     await dp.start_polling(bot)
 
 
 if __name__ == "__main__":
+    print(dt.now(), "Starting...")
     try:
-        print("Starting...")
         asyncio.run(main())
     except KeyboardInterrupt:
         log.info("Normal shutdown")
-        print("Bot stopped")
+        print(dt.now(), "Bot stopped")
     except Exception as err:
         log.exception(str(err))

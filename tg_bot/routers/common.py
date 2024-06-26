@@ -1,12 +1,9 @@
-import asyncio
 import logging
-
 from aiogram import Router
 from aiogram.enums import ChatAction
 from aiogram.types import Message
-
-import config as cfg
 import log_utils
+import strings
 
 log = logging.getLogger(name=__name__)
 router = Router(name=__name__)
@@ -19,5 +16,4 @@ async def echo_message(message: Message) -> None:
         chat_id=message.chat.id,
         action=ChatAction.TYPING,
     )
-    await asyncio.sleep(0.05)
-    await message.reply(text=cfg.INCORRECT_INPUT_TEXT)
+    await message.reply(text=strings.INCORRECT_INPUT)

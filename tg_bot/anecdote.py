@@ -2,19 +2,18 @@ __all__ = ("get_anecdote",)
 
 import asyncio
 import logging
-
 from bs4 import BeautifulSoup
-
-import config as cfg
 import log_utils
 import request_utils
+import strings
+from config import config
 
 log = logging.getLogger(name=__name__)
 
 
 def parse_html(text: str) -> str:
     if not text:
-        return cfg.CONTENT_ERROR_TEXT
+        return strings.CONTENT_ERROR
     bs: BeautifulSoup = BeautifulSoup(text, "html.parser")
     result: str = ""
     for i, topic in enumerate(bs.find_all(class_="topicbox")):
@@ -38,7 +37,7 @@ def parse_html(text: str) -> str:
         tmp_list[-1] = ""
         result = "".join(tmp_list)
         break
-    return result or cfg.CONTENT_ERROR_TEXT
+    return result or strings.CONTENT_ERROR
 
 
 async def get_anecdote() -> str:
@@ -46,9 +45,8 @@ async def get_anecdote() -> str:
     resp_reason: str
     resp_text: str
     resp_status, resp_reason, resp_text = await request_utils.request(
-        url=cfg.ANECDOTE_URL
+        url=config.get("Bot", "Anecdote_URL")
     )
-    log.debug(f"{resp_status=} {resp_reason=}")
     result: str
     if resp_status == 200:
         result = parse_html(text=resp_text)

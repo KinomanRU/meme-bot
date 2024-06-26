@@ -1,15 +1,6 @@
 import logging
-from typing import Final, Literal
-
 from aiogram.types import Message
-
-import config as cfg
-
-LOG_LEVEL: Final[int] = logging.DEBUG if cfg.DEBUG_ENABLED else logging.INFO
-LOG_FORMAT: Final[str] = "{asctime} [{levelname}] [{name}] {message}"
-LOG_STYLE: Final[Literal["{"]] = "{"
-LOG_FILE: Final[str] = "tg_bot.log"
-LOG_ENCODING: Final[str] = "utf-8"
+from config import config
 
 
 def format_message(message: Message) -> str:
@@ -21,9 +12,13 @@ def format_message(message: Message) -> str:
 
 def init_logging():
     logging.basicConfig(
-        level=LOG_LEVEL,
-        format=LOG_FORMAT,
-        style=LOG_STYLE,
-        filename=LOG_FILE if not cfg.DEBUG_ENABLED else None,
-        encoding=LOG_ENCODING if not cfg.DEBUG_ENABLED else None,
+        level=logging.DEBUG if config.getboolean("Debug", "Debug") else logging.INFO,
+        format="{asctime} [{levelname}] [{name}] {message}",
+        style="{",
+        filename=(
+            config.get("Logging", "Log_File")
+            if config.getboolean("Logging", "Log_To_File")
+            else None
+        ),
+        encoding="utf-8",
     )

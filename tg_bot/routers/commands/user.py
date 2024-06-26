@@ -1,13 +1,10 @@
-import asyncio
 import logging
-
 from aiogram import Router
 from aiogram.enums import ChatAction
 from aiogram.filters import Command
 from aiogram.types import Message
-
-import config as cfg
 import log_utils
+import strings
 from anecdote import get_anecdote
 from meme import get_meme_link
 
@@ -22,12 +19,11 @@ async def handle_anecdote(message: Message) -> None:
         chat_id=message.chat.id,
         action=ChatAction.TYPING,
     )
-    await asyncio.sleep(0.05)
     anecdote_text: str = await get_anecdote()
     if anecdote_text:
         await message.answer(text=anecdote_text)
     else:
-        await message.answer(text=cfg.CONTENT_ERROR_TEXT)
+        await message.answer(text=strings.CONTENT_ERROR)
 
 
 @router.message(Command("meme"))
@@ -37,7 +33,6 @@ async def handle_meme(message: Message) -> None:
         chat_id=message.chat.id,
         action=ChatAction.UPLOAD_DOCUMENT,
     )
-    await asyncio.sleep(0.05)
     meme_url: str = await get_meme_link()
     if meme_url.startswith("http"):
         match meme_url.split(".")[-1]:
@@ -50,7 +45,7 @@ async def handle_meme(message: Message) -> None:
     elif meme_url:
         await message.answer(text=meme_url)
     else:
-        await message.answer(text=cfg.CONTENT_ERROR_TEXT)
+        await message.answer(text=strings.CONTENT_ERROR)
 
 
 @router.message(Command("gmeme"))
@@ -60,14 +55,13 @@ async def handle_vmeme(message: Message) -> None:
         chat_id=message.chat.id,
         action=ChatAction.UPLOAD_DOCUMENT,
     )
-    await asyncio.sleep(0.05)
     meme_url: str = await get_meme_link("gif")
     if meme_url.startswith("http"):
         await message.answer_animation(animation=meme_url)
     elif meme_url:
         await message.answer(text=meme_url)
     else:
-        await message.answer(text=cfg.CONTENT_ERROR_TEXT)
+        await message.answer(text=strings.CONTENT_ERROR)
 
 
 @router.message(Command("vmeme"))
@@ -77,11 +71,10 @@ async def handle_gmeme(message: Message) -> None:
         chat_id=message.chat.id,
         action=ChatAction.UPLOAD_VIDEO,
     )
-    await asyncio.sleep(0.05)
     meme_url: str = await get_meme_link("video")
     if meme_url.startswith("http"):
         await message.answer_video(video=meme_url)
     elif meme_url:
         await message.answer(text=meme_url)
     else:
-        await message.answer(text=cfg.CONTENT_ERROR_TEXT)
+        await message.answer(text=strings.CONTENT_ERROR)

@@ -3,12 +3,10 @@ __all__ = ("get_meme_link",)
 import asyncio
 import logging
 from typing import Literal
-
 from bs4 import BeautifulSoup
-
-import config as cfg
 import log_utils
 import request_utils
+from config import config
 
 log = logging.getLogger(name=__name__)
 
@@ -92,13 +90,12 @@ async def get_meme_link(what: Literal["gif", "video"] | None = None) -> str:
     resp_reason: str
     resp_text: str
     result: str = ""
-    attempts: int = cfg.MEME_SEARCH_ATTEMPTS if what else 1
+    attempts: int = config.getint("Bot", "Meme_Search_Attempts") if what else 1
     for _ in range(attempts):
         log.debug(f"iter={_}")
         resp_status, resp_reason, resp_text = await request_utils.request(
-            url=cfg.MEME_URL
+            url=config.get("Bot", "Meme_URL")
         )
-        log.debug(f"{resp_status=} {resp_reason=}")
         if resp_status == 200:
             match what:
                 case None:
