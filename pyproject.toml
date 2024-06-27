@@ -1,7 +1,7 @@
 [tool.poetry]
-name = "tg-bot"
+name = "meme-bot"
 version = "0.0.1"
-description = "Telegram bot for https://t.me/rrv_robot"
+description = "Telegram bot for https://www.anekdot.ru/"
 authors = ["Roman Ryzhkov"]
 readme = "README.md"
 

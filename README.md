@@ -1,1 +1,1 @@
-# Telegram bot for https://t.me/rrv_robot
+# Telegram bot for https://www.anekdot.ru/

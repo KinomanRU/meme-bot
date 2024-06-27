@@ -18,7 +18,7 @@ async def handle_start(message: Message) -> None:
         action=ChatAction.TYPING,
     )
     await message.answer(
-        text=f"Hello, {message.from_user.full_name}!\n\n" + strings.HELP
+        text=strings.HELLO.replace("%USER%", message.from_user.full_name)
     )
 
 
