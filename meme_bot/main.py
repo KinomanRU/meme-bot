@@ -1,7 +1,6 @@
 import asyncio
 import logging
 from datetime import datetime
-from typing import Never
 from aiogram import Bot, Dispatcher
 import log_utils
 import proxy_utils
@@ -11,7 +10,7 @@ from routers import router as main_router
 log = logging.getLogger(name=__name__)
 
 
-async def main() -> Never:
+async def main() -> None:
     log_utils.init_logging()
     dp = Dispatcher()
     dp.include_router(main_router)
