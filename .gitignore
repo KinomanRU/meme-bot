@@ -163,3 +163,4 @@ cython_debug/
 
 # Developer settings
 settings_dev.ini
+compose.yaml
