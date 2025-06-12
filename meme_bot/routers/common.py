@@ -11,7 +11,7 @@ router = Router(name=__name__)
 
 @router.message()
 async def echo_message(message: Message) -> None:
-    log.info(log_utils.format_message(message=message))
+    log_utils.log_command(log, logging.INFO, message)
     await message.bot.send_chat_action(
         chat_id=message.chat.id,
         action=ChatAction.TYPING,

@@ -85,7 +85,7 @@ def search_video_meme(text: str) -> str:
 
 async def get_meme_link(what: Literal["gif", "video"] | None = None) -> str:
     if what not in ("gif", "video", None):
-        log.debug(f"Incorrect parameter {what=}")
+        log.debug("Incorrect parameter what=%r", what)
         return ""
     resp_status: int
     resp_reason: str
@@ -93,7 +93,7 @@ async def get_meme_link(what: Literal["gif", "video"] | None = None) -> str:
     result: str = ""
     attempts: int = config.getint("Bot", "Meme_Search_Attempts") if what else 1
     for _ in range(attempts):
-        log.debug(f"iter={_}")
+        log.debug("iter=%s", _)
         resp_status, resp_reason, resp_text = await request_utils.request(url=urls.MEME)
         if resp_status == 200:
             match what:
@@ -103,7 +103,7 @@ async def get_meme_link(what: Literal["gif", "video"] | None = None) -> str:
                     result = search_gif_meme(text=resp_text)
                 case "video":
                     result = search_video_meme(text=resp_text)
-            log.debug(f"{result=}")
+            log.debug("result=%r", result)
             if result:
                 break
         else:

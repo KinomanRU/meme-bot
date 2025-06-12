@@ -3,11 +3,15 @@ from aiogram.types import Message
 from config import config
 
 
-def format_message(message: Message) -> str:
-    command: str = (
-        "Command '" + message.text + "'" if message.text else "No text command given"
+def log_command(logger: logging.Logger, level: int, message: Message) -> None:
+    command: str = "Command '" + (message.text if message.text else "") + "'"
+    logger.log(
+        level,
+        "%s from %r [%s]",
+        command,
+        message.from_user.full_name,
+        message.from_user,
     )
-    return f"{command} from '{message.from_user.full_name}' [{str(message.from_user)}]"
 
 
 def init_logging():

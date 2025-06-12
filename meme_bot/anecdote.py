@@ -48,7 +48,7 @@ async def get_anecdote() -> str:
     result: str
     if resp_status == 200:
         result = parse_html(text=resp_text)
-        log.debug(f"{result=}")
+        log.debug("result=%r", result)
     else:
         result = str(resp_status) + " - " + resp_reason
     return result

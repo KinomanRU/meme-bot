@@ -6,7 +6,7 @@ log = logging.getLogger(name=__name__)
 
 
 async def request(url: str) -> tuple[int, str, str]:
-    log.debug(f"request_{url=}")
+    log.debug("request_url=%s", url)
     try:
         async with aiohttp.ClientSession() as session:
             async with session.get(
@@ -15,7 +15,9 @@ async def request(url: str) -> tuple[int, str, str]:
                 proxy_auth=proxy_utils.AUTH,
             ) as response:
                 log.debug(
-                    f"response_status={response.status} response_reason={response.reason!r}"
+                    "response_status=%s response_reason=%s",
+                    response.status,
+                    response.reason,
                 )
                 return response.status, response.reason, await response.text()
     except Exception as err:

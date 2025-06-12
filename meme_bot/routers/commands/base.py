@@ -12,7 +12,7 @@ router = Router(name=__name__)
 
 @router.message(CommandStart())
 async def handle_start(message: Message) -> None:
-    log.info(log_utils.format_message(message=message))
+    log_utils.log_command(log, logging.INFO, message)
     await message.bot.send_chat_action(
         chat_id=message.chat.id,
         action=ChatAction.TYPING,
@@ -24,7 +24,7 @@ async def handle_start(message: Message) -> None:
 
 @router.message(Command("help"))
 async def handle_help(message: Message) -> None:
-    log.info(log_utils.format_message(message=message))
+    log_utils.log_command(log, logging.INFO, message)
     await message.bot.send_chat_action(
         chat_id=message.chat.id,
         action=ChatAction.TYPING,

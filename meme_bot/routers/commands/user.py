@@ -14,7 +14,7 @@ router = Router(name=__name__)
 
 @router.message(Command("anec"))
 async def handle_anecdote(message: Message) -> None:
-    log.info(log_utils.format_message(message=message))
+    log_utils.log_command(log, logging.INFO, message)
     await message.bot.send_chat_action(
         chat_id=message.chat.id,
         action=ChatAction.TYPING,
@@ -28,7 +28,7 @@ async def handle_anecdote(message: Message) -> None:
 
 @router.message(Command("meme"))
 async def handle_meme(message: Message) -> None:
-    log.info(log_utils.format_message(message=message))
+    log_utils.log_command(log, logging.INFO, message)
     await message.bot.send_chat_action(
         chat_id=message.chat.id,
         action=ChatAction.UPLOAD_DOCUMENT,
@@ -50,7 +50,7 @@ async def handle_meme(message: Message) -> None:
 
 @router.message(Command("gmeme"))
 async def handle_vmeme(message: Message) -> None:
-    log.info(log_utils.format_message(message=message))
+    log_utils.log_command(log, logging.INFO, message)
     await message.bot.send_chat_action(
         chat_id=message.chat.id,
         action=ChatAction.UPLOAD_DOCUMENT,
@@ -66,7 +66,7 @@ async def handle_vmeme(message: Message) -> None:
 
 @router.message(Command("vmeme"))
 async def handle_gmeme(message: Message) -> None:
-    log.info(log_utils.format_message(message=message))
+    log_utils.log_command(log, logging.INFO, message)
     await message.bot.send_chat_action(
         chat_id=message.chat.id,
         action=ChatAction.UPLOAD_VIDEO,
