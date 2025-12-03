@@ -1,0 +1,10 @@
+services:
+    meme-bot:
+        build:
+            dockerfile: ./Dockerfile
+            context: ./
+        container_name: meme-bot
+        image: meme-bot
+        shm_size: 128mb
+        environment:
+            - BOT_TOKEN=
