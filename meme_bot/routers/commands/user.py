@@ -49,7 +49,7 @@ async def handle_meme(message: Message) -> None:
 
 
 @router.message(Command("gmeme"))
-async def handle_vmeme(message: Message) -> None:
+async def handle_gmeme(message: Message) -> None:
     log_utils.log_command(log, logging.INFO, message)
     await message.bot.send_chat_action(
         chat_id=message.chat.id,
@@ -65,7 +65,7 @@ async def handle_vmeme(message: Message) -> None:
 
 
 @router.message(Command("vmeme"))
-async def handle_gmeme(message: Message) -> None:
+async def handle_vmeme(message: Message) -> None:
     log_utils.log_command(log, logging.INFO, message)
     await message.bot.send_chat_action(
         chat_id=message.chat.id,
