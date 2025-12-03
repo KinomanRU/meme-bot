@@ -17,8 +17,7 @@ def log_command(logger: logging.Logger, level: int, message: Message) -> None:
 def init_logging():
     logging.basicConfig(
         level=logging.DEBUG if config.getboolean("Debug", "Debug") else logging.INFO,
-        format="{asctime} [{levelname}] [{name}] {message}",
-        style="{",
+        format="%(asctime)s [%(levelname)s] [%(name)s] %(message)s",
         filename=(
             config.get("Logging", "Log_File")
             if config.getboolean("Logging", "Log_To_File")
