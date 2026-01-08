@@ -13,4 +13,4 @@ RUN uv pip install --no-cache --system -r pyproject.toml
 COPY meme_bot .
 COPY settings*.ini ./
 
-CMD ["uv", "run", "--no-dev", "main.py"]
+ENTRYPOINT ["uv", "run", "--no-dev", "main.py"]
