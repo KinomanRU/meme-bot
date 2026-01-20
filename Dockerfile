@@ -5,7 +5,7 @@ ENV PYTHONDONTWRITEBYTECODE=1
 
 WORKDIR /app
 
-RUN pip install --upgrade pip uv
+RUN python -m pip install --upgrade pip uv
 
 COPY pyproject.toml uv.lock ./
 RUN uv pip install --no-cache --system -r pyproject.toml
