@@ -3,10 +3,11 @@ __all__ = ("get_meme_link",)
 import asyncio
 import logging
 from typing import Literal
-from bs4 import BeautifulSoup
+
 import log_utils
 import request_utils
 import urls
+from bs4 import BeautifulSoup
 from config import config
 
 log = logging.getLogger(name=__name__)
