@@ -5,7 +5,7 @@ description = "Telegram bot for https://www.anekdot.ru/"
 readme = "README.md"
 requires-python = ">=3.13"
 dependencies = [
-    "aiogram>=3.27.0",
+    "aiogram>=3.28.2",
     "aiohttp>=3.13.5",
     "beautifulsoup4>=4.14.3",
 ]
