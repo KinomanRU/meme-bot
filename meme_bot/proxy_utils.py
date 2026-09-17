@@ -1,18 +1,17 @@
+from typing import Final
+
 from aiogram.client.session.aiohttp import AiohttpSession
 from aiohttp import BasicAuth
 from config import config
-from typing import Final
 
-PROXY: Final[bool] = config.getboolean("Proxy", "Proxy")
-PROXY_URL: Final[str] = config.get("Proxy", "Proxy_URL") if PROXY else None
+PROXY: Final[bool] = config.proxy
+PROXY_URL: Final[str] = config.proxy_url if PROXY else ""
 AUTH: Final[BasicAuth] = (
     BasicAuth(
-        login=config.get("Proxy", "User_Name"),
-        password=config.get("Proxy", "User_Pass"),
+        login=config.user_name if PROXY else "",
+        password=config.user_pass if PROXY else "",
     )
-    if PROXY
-    else None
 )
-SESSION: Final[AiohttpSession] = (
+SESSION: Final[AiohttpSession] | None = (
     AiohttpSession(proxy=(PROXY_URL, AUTH)) if PROXY else None
 )

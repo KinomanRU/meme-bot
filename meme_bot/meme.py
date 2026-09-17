@@ -2,13 +2,13 @@ __all__ = ("get_meme_link",)
 
 import asyncio
 import logging
-from typing import Literal
+from http import HTTPStatus
 
 import log_utils
-import request_utils
 import urls
 from bs4 import BeautifulSoup
 from config import config
+from request_utils import HttpClient, http_client
 
 log = logging.getLogger(name=__name__)
 
@@ -84,19 +84,22 @@ def search_video_meme(text: str) -> str:
     return result
 
 
-async def get_meme_link(what: Literal["gif", "video"] | None = None) -> str:
+async def get_meme_link(
+    http_client: HttpClient,
+    what: str | None = None,
+) -> str:
     if what not in ("gif", "video", None):
         log.debug("Incorrect parameter what=%r", what)
         return ""
     resp_status: int
-    resp_reason: str
+    resp_reason: str | None
     resp_text: str
     result: str = ""
-    attempts: int = config.getint("Bot", "Meme_Search_Attempts") if what else 1
+    attempts: int = config.meme_search_attempts if what else 1
     for _ in range(attempts):
         log.debug("iter=%s", _)
-        resp_status, resp_reason, resp_text = await request_utils.request(url=urls.MEME)
-        if resp_status == 200:
+        resp_status, resp_reason, resp_text = await http_client.request(url=urls.MEME)
+        if resp_status == HTTPStatus.OK:
             match what:
                 case None:
                     result = search_any_meme(text=resp_text)
@@ -108,7 +111,7 @@ async def get_meme_link(what: Literal["gif", "video"] | None = None) -> str:
             if result:
                 break
         else:
-            result = str(resp_status) + " - " + resp_reason
+            result = str(resp_status) + " - " + str(resp_reason)
             break
     return result
 
@@ -116,7 +119,8 @@ async def get_meme_link(what: Literal["gif", "video"] | None = None) -> str:
 async def main() -> None:
     log_utils.init_logging()
     choice = input("['gif', 'video', None]: ")
-    await get_meme_link(choice if choice else None)
+    await get_meme_link(http_client, choice if choice else None)
+    await http_client.close()
 
 
 if __name__ == "__main__":

@@ -2,11 +2,13 @@ __all__ = ("get_anecdote",)
 
 import asyncio
 import logging
-from bs4 import BeautifulSoup
+from http import HTTPStatus
+
 import log_utils
-import request_utils
 import strings
 import urls
+from bs4 import BeautifulSoup
+from request_utils import HttpClient, http_client
 
 log = logging.getLogger(name=__name__)
 
@@ -40,23 +42,24 @@ def parse_html(text: str) -> str:
     return result or strings.CONTENT_ERROR
 
 
-async def get_anecdote() -> str:
+async def get_anecdote(http_client: HttpClient) -> str:
     resp_status: int
-    resp_reason: str
+    resp_reason: str | None
     resp_text: str
-    resp_status, resp_reason, resp_text = await request_utils.request(url=urls.ANECDOTE)
+    resp_status, resp_reason, resp_text = await http_client.request(url=urls.ANECDOTE)
     result: str
-    if resp_status == 200:
+    if resp_status == HTTPStatus.OK:
         result = parse_html(text=resp_text)
         log.debug("result=%r", result)
     else:
-        result = str(resp_status) + " - " + resp_reason
+        result = str(resp_status) + " - " + str(resp_reason)
     return result
 
 
 async def main() -> None:
     log_utils.init_logging()
-    await get_anecdote()
+    await get_anecdote(http_client)
+    await http_client.close()
 
 
 if __name__ == "__main__":

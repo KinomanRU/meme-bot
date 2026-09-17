@@ -1,24 +1,20 @@
 import asyncio
 import logging
-from os import getenv
-import importlib.util
 from datetime import datetime
-from aiogram import Bot, Dispatcher
+
 import log_utils
 import proxy_utils
+from aiogram import Bot, Dispatcher
+from config import config
+from request_utils import http_client
 from routers import router as main_router
-
-if importlib.util.find_spec("dotenv"):
-    from dotenv import load_dotenv
-
-    load_dotenv()
 
 log = logging.getLogger(name=__name__)
 
 
 async def main() -> None:
     log_utils.init_logging()
-    bot_token = getenv("BOT_TOKEN")
+    bot_token = config.bot_token
     if not bot_token:
         raise Exception("BOT_TOKEN environment variable is not set")
     dp = Dispatcher()
@@ -27,7 +23,10 @@ async def main() -> None:
         token=bot_token,
         session=proxy_utils.SESSION,
     )
-    await dp.start_polling(bot)
+    try:
+        await dp.start_polling(bot)
+    finally:
+        await http_client.close()
 
 
 if __name__ == "__main__":
