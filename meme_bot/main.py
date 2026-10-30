@@ -6,17 +6,18 @@ import log_utils
 import proxy_utils
 from aiogram import Bot, Dispatcher
 from config import config
+from errors import BotNoToken
 from request_utils import http_client
 from routers import router as main_router
 
-log = logging.getLogger(name=__name__)
+log = logging.getLogger(__name__)
 
 
 async def main() -> None:
     log_utils.init_logging()
     bot_token = config.bot_token
     if not bot_token:
-        raise Exception("BOT_TOKEN environment variable is not set")
+        raise BotNoToken
     dp = Dispatcher()
     dp.include_router(main_router)
     bot = Bot(
@@ -35,7 +36,7 @@ if __name__ == "__main__":
         asyncio.run(main())
     except KeyboardInterrupt:
         log.info("Normal shutdown")
-    except Exception as err:
-        log.exception(str(err))
+    except Exception:
+        log.exception("An error has occurred")
     finally:
         print(datetime.now(), "Bot stopped")
