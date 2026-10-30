@@ -12,7 +12,7 @@ from meme import get_meme_link
 from request_utils import http_client
 from tenacity import before_sleep_log, retry, stop_after_attempt
 
-log = logging.getLogger(name=__name__)
+log = logging.getLogger(__name__)
 router = Router(name=__name__)
 
 

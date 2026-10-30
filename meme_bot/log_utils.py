@@ -5,7 +5,11 @@ from aiogram.types import Message
 from config import config
 
 
-def log_command(logger: logging.Logger, level: int, message: Message) -> None:
+def log_command(
+    logger: logging.Logger,
+    level: int,
+    message: Message,
+) -> None:
     command: str = "Command '" + (message.text if message.text else "") + "'"
     logger.log(
         level,

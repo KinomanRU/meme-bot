@@ -1,9 +1,10 @@
 import logging
+from http import HTTPStatus
 
 import aiohttp
 import proxy_utils
 
-log = logging.getLogger(name=__name__)
+log = logging.getLogger(__name__)
 
 
 class HttpClient:
@@ -18,7 +19,7 @@ class HttpClient:
             self._session = aiohttp.ClientSession()
         return self._session
 
-    async def request(self, url: str) -> tuple[int, str| None, str]:
+    async def request(self, url: str) -> tuple[int, str | None, str]:
         log.debug("request_url=%s", url)
         try:
             session = await self._get_session()
@@ -33,9 +34,9 @@ class HttpClient:
                     response.reason,
                 )
                 return response.status, response.reason, await response.text()
-        except Exception as err:
-            log.exception("Error during request to %s: %s", url, str(err))
-            return 400, "Bad Request", ""
+        except Exception:
+            log.exception("Error during request to %s:", url)
+            return HTTPStatus.BAD_REQUEST, HTTPStatus.BAD_REQUEST.phrase, ""
 
     async def close(self):
         """Метод для корректного закрытия сессии при выходе из приложения"""

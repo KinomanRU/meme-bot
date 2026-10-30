@@ -10,7 +10,7 @@ from bs4 import BeautifulSoup
 from config import config
 from request_utils import HttpClient, http_client
 
-log = logging.getLogger(name=__name__)
+log = logging.getLogger(__name__)
 
 
 def search_any_meme(text: str) -> str:

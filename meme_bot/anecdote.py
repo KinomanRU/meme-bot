@@ -10,7 +10,7 @@ import urls
 from bs4 import BeautifulSoup
 from request_utils import HttpClient, http_client
 
-log = logging.getLogger(name=__name__)
+log = logging.getLogger(__name__)
 
 
 def parse_html(text: str) -> str:

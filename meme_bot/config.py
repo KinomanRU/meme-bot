@@ -22,12 +22,8 @@ if not config_file.read(DEV_FILES) and not config_file.read(FILES):
 
 
 class Settings(BaseSettings):
-    model_config = SettingsConfigDict(
-        case_sensitive=False,
-        env_file=".env",
-    )
-    debug: bool = config_file.getboolean("Debug", "Debug")
     bot_token: str = ""
+    debug: bool = config_file.getboolean("Debug", "Debug")
     meme_search_attempts: int = config_file.getint("Bot", "Meme_Search_Attempts")
     log_to_file: bool = config_file.getboolean("Logging", "Log_To_File")
     log_file: str = config_file.get("Logging", "Log_File")
@@ -35,6 +31,11 @@ class Settings(BaseSettings):
     proxy_url: str = config_file.get("Proxy", "Proxy_URL")
     user_name: str = config_file.get("Proxy", "User_Name")
     user_pass: str = config_file.get("Proxy", "User_Pass")
+
+    model_config = SettingsConfigDict(
+        case_sensitive=False,
+        env_file=".env",
+    )
 
 
 config: Settings = Settings()

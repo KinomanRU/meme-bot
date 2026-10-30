@@ -7,7 +7,7 @@ from aiogram.enums import ChatAction
 from aiogram.filters import Command, CommandStart
 from aiogram.types import Message
 
-log = logging.getLogger(name=__name__)
+log = logging.getLogger(__name__)
 router = Router(name=__name__)
 
 
