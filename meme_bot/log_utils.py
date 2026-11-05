@@ -3,6 +3,7 @@ from logging.handlers import RotatingFileHandler
 
 from aiogram.types import Message
 from config import config
+from strings import UNKNOWN_USER
 
 
 def log_command(
@@ -15,7 +16,7 @@ def log_command(
         level,
         "%s from %r [%s]",
         command,
-        message.from_user.full_name if message.from_user else "",
+        message.from_user.full_name if message.from_user else UNKNOWN_USER,
         message.from_user,
         stacklevel=2,
     )

@@ -6,3 +6,4 @@ HELP: Final[str] = (
 HELLO: Final[str] = "Hello, %USER%! Welcome to Meme bot.\n\n" + HELP
 CONTENT_ERROR: Final[str] = "Sorry, but there is a problem with content"
 UNKNOWN_COMMAND: Final[str] = "Unknown command. Type /help for help."
+UNKNOWN_USER: Final[str] = "Friend"

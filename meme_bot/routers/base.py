@@ -22,7 +22,7 @@ async def handle_start(message: Message) -> None:
     await message.answer(
         text=strings.HELLO.replace(
             "%USER%",
-            message.from_user.full_name if message.from_user else "",
+            message.from_user.full_name if message.from_user else strings.UNKNOWN_USER,
         )
     )
 
